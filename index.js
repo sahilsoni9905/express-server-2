@@ -17,7 +17,8 @@ const PORT = process.env.PORT || 5000;
 
 // CORS configuration
 app.use(cors({
-  origin: ['https://expense-tracker-olive-phi.vercel.app', 'http://localhost:5173'],
+  origin: '*',  // Allow all origins temporarily for debugging
+  credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
@@ -38,10 +39,10 @@ const connectDB = async () => {
 };
 
 // Routes
-app.use("/api/shops", shopRoutes);
-app.use("/api/shops/:shopId/customers", customerRoutes);
+app.use("/shops", shopRoutes);
+app.use("/shops/:shopId/customers", customerRoutes);
 app.use(
-  "/api/shops/:shopId/customers/:customerId/transactions",
+  "/shops/:shopId/customers/:customerId/transactions",
   transactionRoutes
 );
 

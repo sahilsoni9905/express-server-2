@@ -38,6 +38,9 @@ const connectDB = async () => {
   }
 };
 
+// Enable pre-flight requests for all routes
+app.options('*', cors());
+
 // Routes
 app.use("/shops", shopRoutes);
 app.use("/shops/:shopId/customers", customerRoutes);
@@ -49,6 +52,17 @@ app.use(
 // Root route
 app.get("/", (req, res) => {
   res.send("Shop Money Management API is running");
+});
+
+// Error handling middleware
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({ message: 'Something broke!' });
+});
+
+// Handle 404
+app.use((req, res) => {
+  res.status(404).json({ message: 'Route not found' });
 });
 
 // Start server

@@ -28,9 +28,7 @@ app.use(express.json());
 // Database connection
 const connectDB = async () => {
   try {
-    await mongoose.connect(
-      process.env.MONGODB_URI || "mongodb://localhost:27017/shop-money-manager"
-    );
+    await mongoose.connect(process.env.MONGODB_URI);
     console.log("MongoDB connected");
   } catch (error) {
     console.error("MongoDB connection error:", error);

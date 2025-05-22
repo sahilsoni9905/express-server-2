@@ -15,8 +15,13 @@ dotenv.config({
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Middleware
-app.use(cors());
+// CORS configuration
+app.use(cors({
+  origin: '*',  // Allow all origins temporarily for debugging
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
 
 app.use(express.json());
 
@@ -33,17 +38,31 @@ const connectDB = async () => {
   }
 };
 
+// Enable pre-flight requests for all routes
+app.options('*', cors());
+
 // Routes
-app.use("/api/shops", shopRoutes);
-app.use("/api/shops/:shopId/customers", customerRoutes);
+app.use("/shops", shopRoutes);
+app.use("/shops/:shopId/customers", customerRoutes);
 app.use(
-  "/api/shops/:shopId/customers/:customerId/transactions",
+  "/shops/:shopId/customers/:customerId/transactions",
   transactionRoutes
 );
 
 // Root route
 app.get("/", (req, res) => {
   res.send("Shop Money Management API is running");
+});
+
+// Error handling middleware
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({ message: 'Something broke!' });
+});
+
+// Handle 404
+app.use((req, res) => {
+  res.status(404).json({ message: 'Route not found' });
 });
 
 // Start server

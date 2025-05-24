@@ -5,6 +5,7 @@ import dotenv from "dotenv";
 import shopRoutes from "./routes/shops.js";
 import customerRoutes from "./routes/customers.js";
 import transactionRoutes from "./routes/transactions.js";
+import passwordRoutes from "./routes/password.js";
 
 // Load environment variables
 dotenv.config({
@@ -46,6 +47,7 @@ app.use(
   "/shops/:shopId/customers/:customerId/transactions",
   transactionRoutes
 );
+app.use("/password", passwordRoutes);
 
 // Root route
 app.get("/", (req, res) => {
